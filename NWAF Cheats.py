@@ -35,30 +35,31 @@ def get_real_address(pm, base_offset, offsets):
             address = pm.read_longlong(address + offset)
 
         return address + offsets[-1]  # Final offset
-    except Exception as e:
-        print(f"Error resolving pointer: {e}")
+    except:
         return None
 
 # Function to continuously set the value (loop runs while checked)
 def freeze_cheat(cheat_name):
-    pm = pymem.Pymem(GAME_PROCESS_NAME)
     cheat = CHEATS[cheat_name]
-    real_address = get_real_address(pm, cheat["base_offset"], cheat["offsets"])
 
-    if not real_address:
-        return
-
-    print(f"{cheat_name} started - Setting value to {cheat['set_value']}")
-
-    # Keep writing the value while checkbox is checked
-    while cheats_status[cheat_name].get():
+    while cheats_status[cheat_name].get():  # Loop while the cheat is active
         try:
-            if cheat["type"] == "double":
-                pm.write_double(real_address, cheat["set_value"])
-            time.sleep(0.5)  # Adjust write rate
-        except Exception as e:
-            print(f"Error modifying memory: {e}")
-            break  # Stop loop if an error occurs
+            pm = pymem.Pymem(GAME_PROCESS_NAME)  # Try to attach to the game process
+            real_address = get_real_address(pm, cheat["base_offset"], cheat["offsets"])
+
+            if not real_address:  # If the address cannot be resolved, retry
+                time.sleep(1)  # Wait before retrying
+                continue
+
+            # Write the value if the address is resolved
+            while cheats_status[cheat_name].get():  # Stay in inner loop while cheat is active
+                if cheat["type"] == "double":
+                    pm.write_double(real_address, cheat["set_value"])
+                time.sleep(0.5)  # Adjust write rate
+        except pymem.exception.ProcessNotFound:  # Handle case where the process is not found
+            time.sleep(1)  # Wait before retrying to reconnect
+        except Exception:  # Handle other exceptions
+            time.sleep(1)  # Wait before retrying
 
 # Function to handle checkbox toggle
 def toggle_cheat(cheat_name):
