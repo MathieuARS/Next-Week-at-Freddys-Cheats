@@ -2,6 +2,10 @@
 
 Cheats for the game **Next Week at Freddy's**.
 
+Compatible with game version `1.2.0`
+
+Game link: https://gamejolt.com/games/nwaf/683149
+
 ## Description
 This tool provides cheats for **Next Week at Freddy's**. You can use either the `.py` script or the compiled `.exe`—both work the same.
 
