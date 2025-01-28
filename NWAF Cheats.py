@@ -12,8 +12,8 @@ BASE_MODULE = "NWaF-Win64-Shipping.exe"
 # Cheat Addresses (Multi-Level Pointer Offsets)
 CHEATS = {
     "Unlimited Power": {
-        "base_offset": 0x06900250,  # Static base offset
-        "offsets": [0x6A0, 0x20, 0x330, 0x440, 0x320, 0x50, 0x318],  # Multi-level pointer offsets
+        "base_offset": 0x06C3AFA8,  # Static base offset
+        "offsets": [0xA0, 0x90, 0x308, 0x440, 0x320, 0x50, 0x318],  # Multi-level pointer offsets
         "type": "double",
         "set_value": 99.8  # Always set this value when active
     },
